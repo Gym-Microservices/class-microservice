@@ -10,15 +10,9 @@ import java.util.List;
 @Repository
 public interface ClassRepository extends JpaRepository<Class, Long> {
     
-    List<Class> findByIsActiveTrue();
-    
     List<Class> findByCoachId(Long coachId);
-    
-    List<Class> findByClassType(String classType);
     
     List<Class> findByScheduleBetween(LocalDateTime start, LocalDateTime end);
     
     List<Class> findByCurrentEnrollmentLessThanMaxCapacity();
-    
-    List<Class> findByRoomNumber(String roomNumber);
 }

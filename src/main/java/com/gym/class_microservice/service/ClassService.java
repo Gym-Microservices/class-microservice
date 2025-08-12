@@ -32,10 +32,6 @@ public class ClassService {
         return classRepository.findAll();
     }
     
-    public List<Class> getActiveClasses() {
-        return classRepository.findByIsActiveTrue();
-    }
-    
     public Optional<Class> getClassById(Long id) {
         return classRepository.findById(id);
     }
@@ -44,20 +40,12 @@ public class ClassService {
         return classRepository.findByCoachId(coachId);
     }
     
-    public List<Class> getClassesByType(String classType) {
-        return classRepository.findByClassType(classType);
-    }
-    
     public List<Class> getClassesByDateRange(LocalDateTime start, LocalDateTime end) {
         return classRepository.findByScheduleBetween(start, end);
     }
     
     public List<Class> getAvailableClasses() {
         return classRepository.findByCurrentEnrollmentLessThanMaxCapacity();
-    }
-    
-    public List<Class> getClassesByRoom(String roomNumber) {
-        return classRepository.findByRoomNumber(roomNumber);
     }
     
     public Class updateClass(Long id, Class classDetails) {
@@ -97,13 +85,6 @@ public class ClassService {
         }
         
         return classRepository.save(classObj);
-    }
-    
-    public void deactivateClass(Long id) {
-        Class classObj = classRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Class not found with id: " + id));
-        
-        classRepository.save(classObj);
     }
     
     public void deleteClass(Long id) {

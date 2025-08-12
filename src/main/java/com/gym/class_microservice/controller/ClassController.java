@@ -35,12 +35,6 @@ public class ClassController {
         return ResponseEntity.ok(classes);
     }
     
-    @GetMapping("/active")
-    public ResponseEntity<List<Class>> getActiveClasses() {
-        List<Class> activeClasses = classService.getActiveClasses();
-        return ResponseEntity.ok(activeClasses);
-    }
-    
     @GetMapping("/{id}")
     public ResponseEntity<Class> getClassById(@PathVariable Long id) {
         Optional<Class> classObj = classService.getClassById(id);
@@ -51,12 +45,6 @@ public class ClassController {
     @GetMapping("/coach/{coachId}")
     public ResponseEntity<List<Class>> getClassesByCoach(@PathVariable Long coachId) {
         List<Class> classes = classService.getClassesByCoach(coachId);
-        return ResponseEntity.ok(classes);
-    }
-    
-    @GetMapping("/type/{classType}")
-    public ResponseEntity<List<Class>> getClassesByType(@PathVariable String classType) {
-        List<Class> classes = classService.getClassesByType(classType);
         return ResponseEntity.ok(classes);
     }
     
@@ -71,12 +59,6 @@ public class ClassController {
     @GetMapping("/available")
     public ResponseEntity<List<Class>> getAvailableClasses() {
         List<Class> classes = classService.getAvailableClasses();
-        return ResponseEntity.ok(classes);
-    }
-    
-    @GetMapping("/room/{roomNumber}")
-    public ResponseEntity<List<Class>> getClassesByRoom(@PathVariable String roomNumber) {
-        List<Class> classes = classService.getClassesByRoom(roomNumber);
         return ResponseEntity.ok(classes);
     }
     
@@ -107,16 +89,6 @@ public class ClassController {
             return ResponseEntity.ok(classObj);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
-        }
-    }
-    
-    @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateClass(@PathVariable Long id) {
-        try {
-            classService.deactivateClass(id);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
         }
     }
     
