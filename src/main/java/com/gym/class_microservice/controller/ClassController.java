@@ -56,11 +56,11 @@ public class ClassController {
         return ResponseEntity.ok(classes);
     }
     
-    @GetMapping("/available")
-    public ResponseEntity<List<Class>> getAvailableClasses() {
-        List<Class> classes = classService.getAvailableClasses();
-        return ResponseEntity.ok(classes);
-    }
+    // @GetMapping("/available")
+    // public ResponseEntity<List<Class>> getAvailableClasses() {
+    //     List<Class> classes = classService.getAvailableClasses();
+    //     return ResponseEntity.ok(classes);
+    // }
     
     @PutMapping("/{id}")
     public ResponseEntity<Class> updateClass(@PathVariable Long id, @RequestBody Class classDetails) {
@@ -86,6 +86,19 @@ public class ClassController {
     public ResponseEntity<Class> unenrollMember(@PathVariable Long id, @PathVariable Long memberId) {
         try {
             Class classObj = classService.unenrollMember(id, memberId);
+            return ResponseEntity.ok(classObj);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @PostMapping("/{id}/equipment/{equipmentId}/reserve")
+    public ResponseEntity<Class> reserveEquipmentForClass(
+            @PathVariable Long id, 
+            @PathVariable Long equipmentId,
+            @RequestParam int quantity) {
+        try {
+            Class classObj = classService.reserveEquipmentForClass(id, equipmentId, quantity);
             return ResponseEntity.ok(classObj);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();

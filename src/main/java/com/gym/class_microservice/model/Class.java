@@ -33,4 +33,14 @@ public class Class {
     @CollectionTable(name = "class_enrollments", joinColumns = @JoinColumn(name = "class_id"))
     @Column(name = "member_id")
     private List<Long> enrolledMembers;
+    
+    @ElementCollection
+    @CollectionTable(name = "class_equipment_reservations", joinColumns = @JoinColumn(name = "class_id"))
+    @Column(name = "equipment_id")
+    private List<Long> reservedEquipment;
+    
+    @ElementCollection
+    @CollectionTable(name = "class_equipment_quantities", joinColumns = @JoinColumn(name = "class_id"))
+    @Column(name = "quantity")
+    private List<Integer> equipmentQuantities;
 }

@@ -13,6 +13,4 @@ public interface ClassRepository extends JpaRepository<Class, Long> {
     List<Class> findByCoachId(Long coachId);
     
     List<Class> findByScheduleBetween(LocalDateTime start, LocalDateTime end);
-    
-    List<Class> findByCurrentEnrollmentLessThanMaxCapacity();
 }
