@@ -1,6 +1,6 @@
 package com.gym.class_microservice.service;
 
-import com.gym.class_microservice.model.Class;
+import com.gym.class_microservice.model.GymClass;
 import com.gym.class_microservice.repository.ClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class ClassService {
     @Autowired
     private ValidationService validationService;
     
-    public Class scheduleClass(Class classObj) {
+    public GymClass scheduleClass(GymClass classObj) {
         if (classObj.getSchedule() == null) {
             throw new RuntimeException("Class schedule cannot be null");
         }
@@ -52,24 +52,24 @@ public class ClassService {
         return classRepository.save(classObj);
     }
     
-    public List<Class> getAllClasses() {
+    public List<GymClass> getAllClasses() {
         return classRepository.findAll();
     }
     
-    public Optional<Class> getClassById(Long id) {
+    public Optional<GymClass> getClassById(Long id) {
         return classRepository.findById(id);
     }
     
-    public List<Class> getClassesByCoach(Long coachId) {
+    public List<GymClass> getClassesByCoach(Long coachId) {
         return classRepository.findByCoachId(coachId);
     }
     
-    public List<Class> getClassesByDateRange(LocalDateTime start, LocalDateTime end) {
+    public List<GymClass> getClassesByDateRange(LocalDateTime start, LocalDateTime end) {
         return classRepository.findByScheduleBetween(start, end);
     }
     
-    public Class updateClass(Long id, Class classDetails) {
-        Class classObj = classRepository.findById(id)
+    public GymClass updateClass(Long id, GymClass classDetails) {
+        GymClass classObj = classRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Class not found with id: " + id));
         
         // Validar que el coach existe si se está cambiando
@@ -87,8 +87,8 @@ public class ClassService {
         return classRepository.save(classObj);
     }
     
-    public Class enrollMember(Long classId, Long memberId) {
-        Class classObj = classRepository.findById(classId)
+    public GymClass enrollMember(Long classId, Long memberId) {
+        GymClass classObj = classRepository.findById(classId)
                 .orElseThrow(() -> new RuntimeException("Class not found with id: " + classId));
         
         // Validar que el miembro existe
@@ -108,8 +108,8 @@ public class ClassService {
         return classRepository.save(classObj);
     }
     
-    public Class unenrollMember(Long classId, Long memberId) {
-        Class classObj = classRepository.findById(classId)
+    public GymClass unenrollMember(Long classId, Long memberId) {
+        GymClass classObj = classRepository.findById(classId)
                 .orElseThrow(() -> new RuntimeException("Class not found with id: " + classId));
         
         if (classObj.getEnrolledMembers().remove(memberId)) {
@@ -119,8 +119,8 @@ public class ClassService {
         return classRepository.save(classObj);
     }
     
-    public Class reserveEquipmentForClass(Long classId, Long equipmentId, int quantity) {
-        Class classObj = classRepository.findById(classId)
+    public GymClass reserveEquipmentForClass(Long classId, Long equipmentId, int quantity) {
+        GymClass classObj = classRepository.findById(classId)
                 .orElseThrow(() -> new RuntimeException("Class not found with id: " + classId));
         
         // Validar que el equipo existe
@@ -143,7 +143,7 @@ public class ClassService {
     }
     
     public void deleteClass(Long id) {
-        Class classObj = classRepository.findById(id)
+        GymClass classObj = classRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Class not found with id: " + id));
         
         // Devolver equipos reservados

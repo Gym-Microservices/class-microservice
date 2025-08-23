@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "classes")
-public class Class {
+public class GymClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
