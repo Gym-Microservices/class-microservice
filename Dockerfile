@@ -1,14 +1,32 @@
-# Usar imagen base de Java 17
-FROM openjdk:17-jdk-slim
+# Multi-stage build
+# Stage 1: Build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
-# Establecer directorio de trabajo
+# Copiar settings.xml para GitHub Packages
+COPY settings.xml /root/.m2/settings.xml
+
+# Copiar parent POM
+COPY parent/pom.xml /app/parent/pom.xml
+
+# Copiar código fuente
+COPY class-microservice/pom.xml /app/
+COPY class-microservice/src /app/src
+
 WORKDIR /app
 
-# Copiar el archivo JAR del microservicio
-COPY target/class-microservice-0.0.1-SNAPSHOT.jar app.jar
+# Compilar aplicación
+RUN mvn clean package -DskipTests
 
-# Exponer el puerto 8084
+# Stage 2: Runtime  
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copiar JAR desde build stage
+COPY --from=build /app/target/class-microservice-0.0.1-SNAPSHOT.jar app.jar
+
+# Exponer puerto
 EXPOSE 8084
 
-# Comando para ejecutar la aplicación
+# Comando de ejecución
 CMD ["java", "-jar", "app.jar"]
