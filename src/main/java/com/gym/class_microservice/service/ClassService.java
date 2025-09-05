@@ -1,7 +1,10 @@
 package com.gym.class_microservice.service;
 
+import com.gym.class_microservice.dto.NotificationDTO;
 import com.gym.class_microservice.model.GymClass;
 import com.gym.class_microservice.repository.ClassRepository;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,9 @@ public class ClassService {
     
     @Autowired
     private ValidationService validationService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     
     public GymClass scheduleClass(GymClass classObj) {
         if (classObj.getSchedule() == null) {
@@ -80,11 +86,22 @@ public class ClassService {
         }
         
         classObj.setName(classDetails.getName());
-        classObj.setSchedule(classDetails.getSchedule());
         classObj.setMaxCapacity(classDetails.getMaxCapacity());
         classObj.setCoachId(classDetails.getCoachId());
+
+        if (classDetails.getSchedule() != null){
+            classObj.setSchedule(classDetails.getSchedule());
+            sendNotification(new NotificationDTO(classObj.getCoachId(), "Class schedule updated"));
+            classObj.getEnrolledMembers().forEach(memberId -> {
+                sendNotification(new NotificationDTO(memberId, "Class schedule updated"));
+            });
+        }
         
         return classRepository.save(classObj);
+    }
+
+    public void sendNotification(NotificationDTO notification) {
+        rabbitTemplate.convertAndSend("notification.exchange", "notification.key", notification);
     }
     
     public GymClass enrollMember(Long classId, Long memberId) {
