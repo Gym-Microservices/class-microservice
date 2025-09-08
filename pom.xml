@@ -9,7 +9,7 @@
 		<groupId>com.gym</groupId>
 		<artifactId>gym-microservices-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../parent</relativePath>
+		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>com.gym</groupId>
@@ -18,7 +18,6 @@
 	<name>class-microservice</name>
 	<description>Classes managment microservice</description>
 
-	<!-- Repositories for GitHub Packages -->
 	<repositories>
 		<repository>
 			<id>gym-microservices-releases</id>
@@ -27,6 +26,10 @@
 	</repositories>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.gym</groupId>
+			<artifactId>gym-core</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -44,8 +47,21 @@
 			<artifactId>h2</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
