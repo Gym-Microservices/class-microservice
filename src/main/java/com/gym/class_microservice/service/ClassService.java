@@ -24,6 +24,9 @@ public class ClassService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
     
+    @Autowired
+    private ClassOccupationProducer occupationProducer;
+    
     public GymClass scheduleClass(GymClass classObj) {
         if (classObj.getSchedule() == null) {
             throw new RuntimeException("Class schedule cannot be null");
@@ -120,6 +123,9 @@ public class ClassService {
         if (!classObj.getEnrolledMembers().contains(memberId)) {
             classObj.getEnrolledMembers().add(memberId);
             classObj.setCurrentEnrollment(classObj.getCurrentEnrollment() + 1);
+            
+            // Enviar actualización de ocupación a Kafka
+            occupationProducer.sendOccupationUpdate(classId, classObj.getCurrentEnrollment());
         }
         
         return classRepository.save(classObj);
@@ -131,6 +137,9 @@ public class ClassService {
         
         if (classObj.getEnrolledMembers().remove(memberId)) {
             classObj.setCurrentEnrollment(classObj.getCurrentEnrollment() - 1);
+            
+            // Enviar actualización de ocupación a Kafka
+            occupationProducer.sendOccupationUpdate(classId, classObj.getCurrentEnrollment());
         }
         
         return classRepository.save(classObj);
