@@ -14,6 +14,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.kafka.config.TopicBuilder;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.kafka.support.serializer.JsonSerde;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +43,11 @@ public class KafkaConfig {
     public NewTopic classOccupationTopic() {
         return TopicBuilder.name("class-occupation").partitions(1).replicas(1).build();
     }
+
+	@Bean
+	public NewTopic trainingDataTopic() {
+		return TopicBuilder.name("training-data").partitions(1).replicas(1).build();
+	}
 
     @Bean
     public ConsumerFactory<String, Object> consumerFactory() {
