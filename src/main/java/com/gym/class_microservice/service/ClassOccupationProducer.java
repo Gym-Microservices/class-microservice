@@ -4,11 +4,15 @@ import com.gym.class_microservice.model.ClassOccupation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.support.SendResult;
 
 @Service
 public class ClassOccupationProducer {
     
     private static final String TOPIC = "class-occupation";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClassOccupationProducer.class);
     
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
@@ -17,11 +21,17 @@ public class ClassOccupationProducer {
         ClassOccupation occupationUpdate = new ClassOccupation(classId, currentOccupation);
         
         try {
-            kafkaTemplate.send(TOPIC, classId.toString(), occupationUpdate);
-            System.out.println("Enviada actualización de ocupación para clase " + classId + 
-                             " con ocupación: " + currentOccupation);
+            kafkaTemplate
+                .send(TOPIC, classId.toString(), occupationUpdate)
+                .whenComplete((SendResult<String, Object> result, Throwable ex) -> {
+                    if (ex == null) {
+                        LOGGER.info("Kafka enviado a '{}' clave={} payload={}", TOPIC, classId, occupationUpdate);
+                    } else {
+                        LOGGER.error("Fallo enviando a Kafka tópico '{}' clave={} error={}", TOPIC, classId, ex.getMessage());
+                    }
+                });
         } catch (Exception e) {
-            System.err.println("Error enviando actualización de ocupación: " + e.getMessage());
+            LOGGER.error("Error enviando actualización de ocupación: {}", e.getMessage());
         }
     }
 }

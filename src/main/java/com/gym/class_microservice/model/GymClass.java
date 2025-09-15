@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @Entity
@@ -41,17 +42,17 @@ public class GymClass {
     @CollectionTable(name = "class_enrollments", joinColumns = @JoinColumn(name = "class_id"))
     @Column(name = "member_id")
     @Schema(description = "List of member IDs enrolled in the class")
-    private List<Long> enrolledMembers;
+    private List<Long> enrolledMembers = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "class_equipment_reservations", joinColumns = @JoinColumn(name = "class_id"))
     @Column(name = "equipment_id")
     @Schema(description = "List of equipment IDs reserved for the class")
-    private List<Long> reservedEquipment;
+    private List<Long> reservedEquipment = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "class_equipment_quantities", joinColumns = @JoinColumn(name = "class_id"))
     @Column(name = "quantity")
     @Schema(description = "List of quantities corresponding to each reserved equipment")
-    private List<Integer> equipmentQuantities;
+    private List<Integer> equipmentQuantities = new ArrayList<>();
 }
