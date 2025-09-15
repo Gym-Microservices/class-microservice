@@ -34,7 +34,7 @@ public class ClassController {
             @ApiResponse(responseCode = "200", description = "Class created successfully"),
             @ApiResponse(responseCode = "400", description = "Error in input data")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     public ResponseEntity<GymClass> scheduleClass(@RequestBody GymClass classObj) {
         try {
             GymClass scheduledClass = classService.scheduleClass(classObj);
@@ -47,7 +47,7 @@ public class ClassController {
     @GetMapping
     @Operation(summary = "Get all classes", description = "Returns a list of all available classes")
     @ApiResponse(responseCode = "200", description = "List of classes retrieved successfully")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<List<GymClass>> getAllClasses() {
         List<GymClass> classes = classService.getAllClasses();
         return ResponseEntity.ok(classes);
@@ -59,7 +59,7 @@ public class ClassController {
             @ApiResponse(responseCode = "200", description = "Class found"),
             @ApiResponse(responseCode = "404", description = "Class not found")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<GymClass> getClassById(@Parameter(description = "Class ID") @PathVariable Long id) {
         Optional<GymClass> classObj = classService.getClassById(id);
         return classObj.map(ResponseEntity::ok)
@@ -69,7 +69,7 @@ public class ClassController {
     @GetMapping("/coach/{coachId}")
     @Operation(summary = "Get classes by coach", description = "Returns all classes assigned to a specific coach")
     @ApiResponse(responseCode = "200", description = "Coach's class list retrieved successfully")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<List<GymClass>> getClassesByCoach(
             @Parameter(description = "Coach ID") @PathVariable Long coachId) {
         List<GymClass> classes = classService.getClassesByCoach(coachId);
@@ -79,7 +79,7 @@ public class ClassController {
     @GetMapping("/schedule")
     @Operation(summary = "Get classes by date range", description = "Returns all classes scheduled within a specific date range")
     @ApiResponse(responseCode = "200", description = "Class list in date range retrieved successfully")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<List<GymClass>> getClassesByDateRange(
             @Parameter(description = "Start date") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @Parameter(description = "End date") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
@@ -93,7 +93,7 @@ public class ClassController {
             @ApiResponse(responseCode = "200", description = "Class updated successfully"),
             @ApiResponse(responseCode = "404", description = "Class not found")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     public ResponseEntity<GymClass> updateClass(@Parameter(description = "Class ID") @PathVariable Long id,
             @RequestBody GymClass classDetails) {
         try {
@@ -110,7 +110,7 @@ public class ClassController {
             @ApiResponse(responseCode = "200", description = "Member enrolled successfully"),
             @ApiResponse(responseCode = "400", description = "Error in enrollment")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<GymClass> enrollMember(@Parameter(description = "Class ID") @PathVariable Long id,
             @Parameter(description = "Member ID") @PathVariable Long memberId) {
         try {
@@ -127,7 +127,7 @@ public class ClassController {
             @ApiResponse(responseCode = "200", description = "Member unenrolled successfully"),
             @ApiResponse(responseCode = "400", description = "Error in unenrollment")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<GymClass> unenrollMember(@Parameter(description = "Class ID") @PathVariable Long id,
             @Parameter(description = "Member ID") @PathVariable Long memberId) {
         try {
@@ -144,7 +144,7 @@ public class ClassController {
             @ApiResponse(responseCode = "200", description = "Equipment reserved successfully"),
             @ApiResponse(responseCode = "400", description = "Error in equipment reservation")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     public ResponseEntity<GymClass> reserveEquipmentForClass(
             @Parameter(description = "Class ID") @PathVariable Long id,
             @Parameter(description = "Equipment ID") @PathVariable Long equipmentId,
@@ -163,7 +163,7 @@ public class ClassController {
             @ApiResponse(responseCode = "200", description = "Class deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Class not found")
     })
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteClass(@Parameter(description = "Class ID") @PathVariable Long id) {
         classService.deleteClass(id);
         return ResponseEntity.ok().build();
