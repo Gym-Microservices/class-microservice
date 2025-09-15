@@ -46,7 +46,11 @@ public class KafkaConfig {
 
 	@Bean
 	public NewTopic trainingDataTopic() {
-		return TopicBuilder.name("training-data").partitions(1).replicas(1).build();
+		return TopicBuilder.name("training-data")
+                .partitions(1)
+                .replicas(1)
+                .config("retention.ms", "604800000") // 7 days
+                .build();
 	}
 
     @Bean
