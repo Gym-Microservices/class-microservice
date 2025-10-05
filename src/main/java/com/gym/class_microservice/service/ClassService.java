@@ -77,6 +77,10 @@ public class ClassService {
         return classRepository.findByScheduleBetween(start, end);
     }
     
+    public List<GymClass> getClassesByMember(Long memberId) {
+        return classRepository.findByEnrolledMembersContaining(memberId);
+    }
+    
     public GymClass updateClass(Long id, GymClass classDetails) {
         GymClass classObj = classRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Class not found with id: " + id));

@@ -87,6 +87,16 @@ public class ClassController {
         return ResponseEntity.ok(classes);
     }
 
+    @GetMapping("/member/{memberId}")
+    @Operation(summary = "Get classes by member", description = "Returns all classes in which a specific member is enrolled")
+    @ApiResponse(responseCode = "200", description = "Member's class list retrieved successfully")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
+    public ResponseEntity<List<GymClass>> getClassesByMember(
+            @Parameter(description = "Member ID") @PathVariable Long memberId) {
+        List<GymClass> classes = classService.getClassesByMember(memberId);
+        return ResponseEntity.ok(classes);
+    }
+
     @PutMapping("/{id}")
     @Operation(summary = "Update class", description = "Updates the details of an existing class")
     @ApiResponses(value = {
